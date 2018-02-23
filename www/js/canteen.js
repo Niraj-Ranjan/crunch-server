@@ -8,7 +8,7 @@ $(document).ready(function () {
             var orderamount = parseInt(orders[item].quantity) * parseInt(orders[item].rate);
 
             //if (orders[item].status == "open") {
-            openorders = ("<div class='collection-item row'><div class='col s2'>" + orderdate + "<br><span class='grey-text'>" + ordertime + "</span></div><div class='col s4'>" + orders[item].item + "<br><span class='grey-text'>" + orders[item].category + "</span></div><div class='col s2'>" + orders[item].quantity + "</div><div class='col s2'>" + orders[item].rate + "</div><div class='col s2 strong'>" + orderamount + "</div></div>");
+            openorders = ("<tr><td>" + orderdate + "<br><span class='grey-text'>" + ordertime + "</span></td><td>" + orders[item].item + "<br><span class='grey-text'>" + orders[item].category + "</span></td><td>" + orders[item].quantity + "</td><td>" + orders[item].rate + "</td><td class='strong'>" + orderamount + "</td><td><a class='btn-floating waves-effect waves-light red 'onclick='ordercancel("+orders[item].time+")'><i class='material-icons' >close</i></a><a class='btn-floating waves-effect waves-light blue' onclick='orderdelivered("+orders[item].time+")'><i class='material-icons'>done_all</i></a><a class='btn-floating waves-effect waves-light green' onclick='orderready("+orders[item].time+")'><i class='material-icons'>check</i></a></td></tr>");
             //.concat(openorders);
             $("#orders-list").prepend(openorders);
             //}
@@ -17,3 +17,8 @@ $(document).ready(function () {
         // console.log(orders);
     });
 });
+
+
+function orderready (ordertime) {
+
+}
