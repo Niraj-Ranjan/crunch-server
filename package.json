@@ -1,7 +1,7 @@
 {
-  "name": "clavi-server",
+  "name": "crunch-server",
   "version": "1.0.0",
-  "description": "A Server for Clavi",
+  "description": "A Server for Crunch",
   "main": "app.js",
   "engines": {
     "node": "8.0.0"

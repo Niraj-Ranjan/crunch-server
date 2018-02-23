@@ -24,9 +24,9 @@
  */
 
 
-const express = require('express');
-const fs = require('fs');
-const bodyParser = require('body-parser');
+var express = require('express');
+var fs = require('fs');
+var bodyParser = require('body-parser');
 
 //var config = require('./config');
 
@@ -34,8 +34,6 @@ const bodyParser = require('body-parser');
 
 var appport = process.env.PORT || 3000;
 var mongolaburi = process.env.MONGOLAB_URI || "mongodb://clavi:clavidbpassword@ds117592.mlab.com:17592/clavi";
-
-//var mongolaburi = "mongodb://clavi:clavidbpassword@ds117592.mlab.com:17592/clavi";
 
 
 
@@ -194,205 +192,11 @@ app.post('/passwordreset', function (req, res) {
 
 
 
-app.get('/userdata', function (req, res) {
-
-    var username = req.query.username;
-
-    MongoClient.connect(url, function (err, db) {
-
-        if (err) {
-            throw err;
-        }
-
-        //console.log("Connected successfully to server");
-
-        var users = db.collection('users');
-
-        users.findOne({
-            id: username
-        }, function (err1, data) {
-            if (err1) {
-                throw err1;
-            }
-
-            if (data !== null) {
-                var userpath = "/data/users/" + data.type + "/" + username + "/";
-
-                var profilepath = userpath + "profile.json";
-                fs.readFile(__dirname + profilepath, function (err2, profiledata) {
-
-                    var profile = JSON.parse(profiledata);
-
-                    res.send(profile);
-                    //console.log("Profile of " + username + " sent.");
-                });
-
-
-            }
-
-            db.close();
-        });
-    });
-
-
-});
-
-
-
-
-app.get('/notifications', function (req, res) {
-    var type = req.query.type;
-    //  type can be "departmantal" or "general"
-
-
-
-    fs.readFile(__dirname + "/data/notifications/" + type + ".json", function (err0, notificationdata) {
-        var notifications = JSON.parse(notificationdata);
-
-        res.send(notifications);
-        // console.log(type + " notifications sent.");
-    });
-
-});
-
-
-
-
-
-app.get('/attendance', function (req, res) {
-    var username = req.query.username;
-
-    MongoClient.connect(url, function (err, db) {
-
-        if (err) {
-            throw err;
-        }
-
-        //console.log("Connected successfully to server");
-
-        var users = db.collection('users');
-
-        users.findOne({
-            id: username
-        }, function (err1, data) {
-            if (err1) {
-                throw err1;
-            }
-
-            if (data !== null) {
-                var userpath = "/data/users/" + data.type + "/" + username + "/";
-
-                var attendancepath = userpath + "attendance.json";
-
-                fs.readFile(__dirname + attendancepath, function (err1, attendancedata) {
-
-                    var attendance = JSON.parse(attendancedata);
-
-                    res.send(attendance);
-                    //  console.log("Attendance of " + username + " sent.");
-                });
-
-            }
-
-            db.close();
-        });
-    });
-
-});
-
-app.get('/academics', function (req, res) {
-    var username = req.query.username;
-
-
-
-    MongoClient.connect(url, function (err, db) {
-
-        if (err) {
-            throw err;
-        }
-
-        //console.log("Connected successfully to server");
-
-        var users = db.collection('users');
-
-        users.findOne({
-            id: username
-        }, function (err1, data) {
-            if (err1) {
-                throw err1;
-            }
-
-            if (data !== null) {
-                var userpath = "/data/users/" + data.type + "/" + username + "/";
-
-                var academicspath = userpath + "academics.json";
-
-                fs.readFile(__dirname + academicspath, function (err1, academicsdata) {
-
-                    var academics = JSON.parse(academicsdata);
-
-                    res.send(academics);
-                    // console.log("Academics of " + username + " sent.");
-
-
-                });
-
-
-            }
-
-            db.close();
-        });
-    });
-
-
-});
-
-
-
-
-
-
-
-/****************************
- *                          *
- *       TRIAL-SERVER       ****************************************************
- *                          *
- ****************************
-
-
- * This part is used for serving the experiments.
- *
- */
-
-app.post("/trialform", function (req, res) {
-    console.log(req.body.check);
-    console.log(req.body.gender);
-    res.send("ok");
-});
-
-
-
-
-
-
-
-
-
 /****************************
  *                          *
  *       DATA-SERVER        ****************************************************
  *                          *
  ****************************
-
-
- * This part is used for serving the admin pages which will not be accessible througn the app.
- * Ex:
- *     Canteen Order listings
- *     User addition for the manager
- *     Other priviledged accounts
- *
- * This part merged in app.js as it will  be easier to run two ports in same process in dataServer like openshift http://www.openshift.com
- *
  */
 
 
@@ -410,24 +214,23 @@ app.get('/rates', function (req, res) {
 
 });
 
-app.get('/canteen/order', function (req, res) {
+app.post('/canteen/order', function (req, res) {
 
 
-    var order = {
-        time: new Date(),
-        item: req.query.item,
-        category: req.query.category,
-        quantity: req.query.quantity,
-        status: "open",
-        username: req.query.username
-    }; // Get canteen orders file and append the request to the file using writefile.
+    var orders = req.body.orders;
+    // Get canteen orders file and append the request to the file using writefile.
 
+
+    var username = orders[0]["username"];
     // that will be done here.
 
 
 
+    //console.log(orders);
 
+    //console.log(orders[0]["username"]);
 
+    //res.send("success");
     // handle for student side.
 
     MongoClient.connect(url, function (err, db) {
@@ -441,7 +244,7 @@ app.get('/canteen/order', function (req, res) {
         var users = db.collection('users');
 
         users.findOne({
-            id: req.query.username
+            id: username
         }, function (err1, userdata) {
             if (err1) {
                 throw err1;
@@ -449,32 +252,49 @@ app.get('/canteen/order', function (req, res) {
 
             if (userdata !== null) {
 
+                var usercanteenpath = "/data/users/" + userdata.type + "/" + username + "/data/canteen/orders.json";
 
-                fs.readFile(__dirname + "/data/canteen/rates.json", function (err, ratedata) {
+                fs.readFile(__dirname + usercanteenpath, function (err, orderdata) {
 
-                    var rates = JSON.parse(ratedata);
+                    var oldorders = JSON.parse(orderdata);
 
-                    order.rate = rates[order.category][order.item];
+                    //console.log(oldorders);
 
-                    var usercanteenpath = "/data/users/" + userdata.type + "/" + req.query.username + "/data/canteen/orders.json";
+                    for (var order in orders) {
 
-                    fs.readFile(__dirname + usercanteenpath, function (err, orderdata) {
+                        oldorders.push(orders[order]);
+                    }
 
 
 
-                        var orders = JSON.parse(orderdata);
-                        //console.log(orders);
+                    fs.writeFile(__dirname + usercanteenpath, JSON.stringify(oldorders), "utf8", function (err) {
+                        if (err) {
+                            throw err;
+                        }
 
-                        orders.push(order);
+                        fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderlist) {
 
-                        fs.writeFile(__dirname + usercanteenpath, JSON.stringify(orders), "utf8", function (err) {
-                            if (err) {
-                                throw err;
+                            var openorders = JSON.parse(orderlist);
+
+                            for (var order in orders) {
+
+                                openorders["open"].push(orders[order]);
                             }
-                            res.send("success");
-                        });
 
+
+                            fs.writeFile(__dirname + "/data/canteen/orders.json", JSON.stringify(openorders), "utf8", function (err) {
+                                if (err) {
+                                    throw err;
+
+                                }
+                                res.send("success");
+                            });
+
+                        });
                     });
+
+
+
 
                 });
 
@@ -490,6 +310,9 @@ app.get('/canteen/order', function (req, res) {
             db.close();
         });
     });
+
+
+
 
 });
 
@@ -578,153 +401,9 @@ app.get('/canteen/myorders/clear', function (req, res) {
 
 
 
-
-
-/****************************
- *                          *
- *      PAPER SERVER        ****************************************************
- *                          *
- ****************************
-
-
- * This part is used for serving the exam paper pdfs.
- *
- *
- *
- */
-
-
-
-app.use(express.static(__dirname + '/www/exampapers'));
-app.use(express.static(__dirname + '/data/exam'));
-
-
-
-app.get('/papers', function (req, res) {
-
-    var requestpath = req.query.path;
-    var path = "/data/exam" + requestpath;
-
-    var sendableObject = {
-        "path": requestpath,
-        "dirs": [],
-        "files": []
-    };
-
-
-
-    fs.readdir(__dirname + path, function (err, pathcontents) {
-
-        for (var item in pathcontents) {
-
-            if (fs.statSync(__dirname + path + "/" + pathcontents[item]).isDirectory()) {
-
-                sendableObject.dirs.push(pathcontents[item]);
-
-            } else {
-                sendableObject.files.push(pathcontents[item]);
-
-            }
-
-        }
-
-        res.send(sendableObject);
-    });
-
-});
-
-
-
-
-
-
-
-/****************************
- *                          *
- *       CHAT SERVER        ****************************************************
- *                          *
- ****************************
-
-
- * This part is used for forum chat will be accessible througn the app.
- *
- */
-
-
-// Setup basic express server
-//var chat = express();
-var appserver = require('http').createServer(app);
-var io = require('socket.io')(appserver);
-
-appserver.listen(appport, function () {
+app.listen(appport, function () {
     console.log('Server listening at port %d', appport);
 });
-
-
-// Chatroom
-
-var numUsers = 0;
-
-io.on('connection', function (socket) {
-    var addedUser = false;
-
-    // when the client emits 'new message', this listens and executes
-    socket.on('new message', function (data) {
-        // we tell the client to execute 'new message'
-        socket.broadcast.emit('new message', {
-            username: socket.username,
-            message: data
-        });
-    });
-
-    // when the client emits 'add user', this listens and executes
-    socket.on('add user', function (username) {
-        if (addedUser) {
-            return;
-        }
-
-        // we store the username in the socket session for this client
-        socket.username = username;
-        ++numUsers;
-        addedUser = true;
-        socket.emit('login', {
-            numUsers: numUsers
-        });
-        // echo globally (all clients) that a person has connected
-        socket.broadcast.emit('user joined', {
-            username: socket.username,
-            numUsers: numUsers
-        });
-    });
-
-    // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', function () {
-        socket.broadcast.emit('typing', {
-            username: socket.username
-        });
-    });
-
-    // when the client emits 'stop typing', we broadcast it to others
-    socket.on('stop typing', function () {
-        socket.broadcast.emit('stop typing', {
-            username: socket.username
-        });
-    });
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', function () {
-        if (addedUser) {
-            --numUsers;
-
-            // echo globally that this client has left
-            socket.broadcast.emit('user left', {
-                username: socket.username,
-                numUsers: numUsers
-            });
-        }
-    });
-});
-
 
 // must be at last
 app.use(function (req, res) {

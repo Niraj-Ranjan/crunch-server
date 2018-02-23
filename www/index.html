@@ -2,24 +2,26 @@
 <html>
 
 <head>
-	<title>Welcome</title>
 
-	<!-- -------------------- META ------------------------------------------- -->
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<!-- -------------------- FONT ------------------------------------------- -->
+    <title>Canteen</title>
 
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- -------------------- META ------------------------------------------- -->
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-	<!-- -------------------- CSS ------------------------------------------- -->
-	<link type="text/css" rel="stylesheet" href="css/materialize.css">
-	<link type="text/css" rel="stylesheet" href="css/style.css">
+    <!-- -------------------- FONT ------------------------------------------- -->
 
-	<!-- -------------------- SCRIPTS ------------------------------------------- -->
-	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-	<script type="text/javascript" src="js/materialize.js"></script>
-	<script type="text/javascript" src="js/js.cookie.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- -------------------- CSS ------------------------------------------- -->
+    <link type="text/css" rel="stylesheet" href="css/materialize.css">
+    <link type="text/css" rel="stylesheet" href="css/style.css">
+
+    <!-- -------------------- SCRIPTS ------------------------------------------- -->
+    <script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/materialize.js"></script>
+    <script type="text/javascript" src="js/js.cookie.js"></script>
 
 
 
@@ -28,25 +30,93 @@
 <body>
 
 
-	<!-- -------------------- CONTENT ------------------------------------------- -->
-	<div class="screen-unit valign-wrapper center blue">
-		<div class="container center">
-			<h1 class="center white-text">Hello</h1>
-
-			<!--<p class="white-text flow-text">Loading...</p>-->
-
-		</div>
-	</div>
-	<!-- -------------------- CONTENT ------------------------------------------- -->
 
 
-	<!-- --------------------------- SCRIPTS ------------------------------------ -->
-	<script type="text/javascript" src="js/script.js" id="global-script"></script>
-	<!--<script type="text/javascript" src="loader.js"></script>      RIGHT NOW, WE JUST NEED HELLO!         -->
 
-    <script>
-        hideWait();
-    </script>
+
+
+    <!-- ----------------------------NAVBAR----------------------------------- -->
+    <nav class="fixed">
+        <div class="nav-wrapper blue darken-2">
+            <a href="#!" class="brand-logo">Canteen</a>
+
+            <a href="#" data-activates="mobile-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="right hide-on-med-and-down">
+                <!--
+                <li class="waves-effect"><a href="../../home.html">Home</a></li>
+                <li class="waves-effect"><a href="../profile/index.html">Profile</a></li>
+                <li class="waves-effect"><a href="../about.html">About</a></li>
+--
+                <li class="waves-effect"><a href="#" class="logout-btn">Logout</a></li>-->
+            </ul>
+            <ul class="side-nav" id="mobile-menu">
+                <li class="side-nav-header full-width green lighten-2"><a href="#" id="side-nav-head">Clavi</a></li>
+                <li class="side-nav-header full-width green lighten-2">
+                    <a href="#" id="user-greeter"></a>
+                </li>
+
+                <!--
+                <li class="waves-effect full-width"><a href="../../home.html">Home</a></li>
+                <li class="waves-effect full-width"><a href="../profile/index.html">Profile</a></li>
+                <li class="waves-effect full-width"><a href="../about.html">About</a></li>
+--
+                <li class="waves-effect full-width"><a href="#" class="logout-btn">Logout</a></li>-->
+            </ul>
+        </div>
+    </nav>
+    <!-- ------------------- NAVBAR -------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+    <!-- -------------------- CONTENT ------------------------------------------- -->
+
+    <div class="container">
+        <h3 class="center">Orders</h3>
+
+
+
+
+
+    </div>
+
+
+
+
+    <!-- -------------------- CONTENT ------------------------------------------- -->
+
+
+
+
+
+
+
+
+
+
+    <!-- ---------------------------Data SCRIPTS----------------------------------- -->
+
+
+
+
+
+
+    <!-- ---------------------------SCRIPTS----------------------------------- -->
+
+
+    <script type="text/javascript" src="js/script.js" id="global-script"></script>
+    <script type="text/javascript" src="js/canteen.js"></script>
+
+
+
+
+
 
 </body>
 
