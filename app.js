@@ -400,6 +400,14 @@ app.get('/canteen/myorders/clear', function (req, res) {
 });
 
 
+app.get('/openorders', function (req, res) {
+    fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+        var orders = JSON.parse(orderdata);
+        res.json(orders["open"]);
+    });
+});
+
+
 
 app.listen(appport, function () {
     console.log('Server listening at port %d', appport);
