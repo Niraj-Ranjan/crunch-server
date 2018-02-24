@@ -1,24 +1,42 @@
-$(document).ready(function () {
-    $.get("/openorders", function (orders) {
 
-        for (item in orders) {
-            var datetime = new Date(orders[item].time);
-            var orderdate = datetime.getDate() + "-" + (datetime.getMonth() + 1);
-            var ordertime = datetime.getHours() + ":" + datetime.getMinutes();
-            var orderamount = parseInt(orders[item].quantity) * parseInt(orders[item].rate);
 
-            //if (orders[item].status == "open") {
-            openorders = ("<tr><td>" + orderdate + "<br><span class='grey-text'>" + ordertime + "</span></td><td>" + orders[item].item + "<br><span class='grey-text'>" + orders[item].category + "</span></td><td>" + orders[item].quantity + "</td><td>" + orders[item].rate + "</td><td class='strong'>" + orderamount + "</td><td><a class='btn-floating waves-effect waves-light red 'onclick='ordercancel("+orders[item].time+")'><i class='material-icons' >close</i></a><a class='btn-floating waves-effect waves-light blue' onclick='orderdelivered("+orders[item].time+")'><i class='material-icons'>done_all</i></a><a class='btn-floating waves-effect waves-light green' onclick='orderready("+orders[item].time+")'><i class='material-icons'>check</i></a></td></tr>");
-            //.concat(openorders);
-            $("#orders-list").prepend(openorders);
-            //}
 
+
+
+
+
+
+
+
+function orderready(ordertime, itemname) {
+    $.post("/orderready", {
+        itemdate: ordertime
+    }, function (res) {
+        if (res == "ok") {
+            document.getElementById(itemname + Date.parse(ordertime)).classList.add("green");
         }
-        // console.log(orders);
     });
-});
+}
 
+function ordercancel(ordertime, itemname) {
+    $.post("/ordercancel", {
+        itemdate: ordertime
+    }, function (res) {
+        if (res == "ok") {
+            var k = document.getElementById(itemname + Date.parse(ordertime));
+            k.parentNode.removeChild(k);
+        }
+    });
+}
 
-function orderready (ordertime) {
-
+function orderdone(ordertime, itemname) {
+    $.post("/orderdone", {
+        itemdate: ordertime
+    }, function (res) {
+        if (res == "ok") {
+            var k = document.getElementById(itemname + Date.parse(ordertime));
+            k.parentNode.removeChild(k);
+        }
+    });
+    updateEarning();
 }

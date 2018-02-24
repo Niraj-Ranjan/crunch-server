@@ -407,7 +407,92 @@ app.get('/openorders', function (req, res) {
     });
 });
 
+app.get('/closedorders', function (req, res) {
+    fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+        var orders = JSON.parse(orderdata);
+        res.json(orders["closed"]);
+    });
+});
 
+
+
+app.post("/orderready", function (req, res) {
+    //fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+    //var orders = JSON.parse(orderdata);
+
+    res.send("ok");
+    //});
+});
+
+
+app.post("/ordercancel", function (req, res) {
+    var itemid = req.body.itemdate;
+    fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+        var orders = JSON.parse(orderdata);
+        for (var item in orders["open"]) {
+
+            if (orders["open"][item]["time"] == itemid) {
+
+                orders["open"].splice(item, 1);
+
+                //orders["open"] = k;
+
+                fs.writeFile(__dirname + "/data/canteen/orders.json", JSON.stringify(orders), "utf8", function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send("ok");
+
+                });
+
+
+            }
+        }
+
+    });
+});
+
+
+app.post("/orderdone", function (req, res) {
+    var itemid = req.body.itemdate;
+    fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+        var orders = JSON.parse(orderdata);
+        for (var item in orders["open"]) {
+
+            if (orders["open"][item]["time"] == itemid) {
+
+                var earn = orders["open"][item]["rate"] * orders["open"][item]["quantity"];
+
+                orders["earnings"] = orders["earnings"] + earn;
+
+                orders["closed"].push(orders["open"][item]);
+
+                orders["open"].splice(item, 1);
+
+                //orders["open"] = k;
+
+                fs.writeFile(__dirname + "/data/canteen/orders.json", JSON.stringify(orders), "utf8", function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                    res.send("ok");
+
+                });
+
+
+            }
+        }
+
+    });
+});
+
+app.get("/earnings", function(req,res) {
+    fs.readFile(__dirname + "/data/canteen/orders.json", function (err, orderdata) {
+        var orders = JSON.parse(orderdata);
+        var k = orders["earnings"];
+        res.json(k);
+    });
+});
 
 app.listen(appport, function () {
     console.log('Server listening at port %d', appport);

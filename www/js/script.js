@@ -45,7 +45,7 @@ $(document).ready(function () {
     $('.modal').modal();
 
 
-    document.getElementById("user-greeter").innerHTML = Cookies.get("username-name");
+   // document.getElementById("user-greeter").innerHTML = Cookies.get("username-name");
 
     hideWait();
 
@@ -100,6 +100,11 @@ $(".logout-btn").click(function () {
 });
 
 
+function updateEarning () {
+    $.get("/earnings", function(resp){
+       document.getElementById("earnings").innerHTML = resp;
+    });
+}
 
 
 

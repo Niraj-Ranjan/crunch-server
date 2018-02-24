@@ -48,7 +48,7 @@
 
 --
                 <li class="waves-effect"><a href="#" class="logout-btn">Logout</a></li>-->
-                <li class="waves-effect"><a href="history.html">History</a></li>
+                <li class="waves-effect"><a href="index.html">Home</a></li>
                 <li class="waves-effect"><a href="#">Earnings: Rs. <span id="earnings">0</span></a></li>
             </ul>
 
@@ -68,7 +68,7 @@
     <!-- -------------------- CONTENT ------------------------------------------- -->
 
     <div class="container">
-        <h3 class="center">Orders</h3>
+        <h3 class="center">Old completed orders</h3>
 
 
 
@@ -85,7 +85,7 @@
                     <th>Rate</th>
                     <th>Amount</th>
                     <th>Customer</th>
-                    <th>Actions</th>
+
                 </tr>
             </thead>
 
@@ -154,11 +154,9 @@
 
     <script type="text/javascript" src="js/script.js" id="global-script"></script>
     <script type="text/javascript" src="js/canteen.js"></script>
-
-
-    <script>
+<script>
         $(document).ready(function() {
-            $.get("/openorders", function(orders) {
+            $.get("/closedorders", function(orders) {
 
                 for (item in orders) {
                     var datetime = new Date(orders[item].time);
@@ -167,7 +165,7 @@
                     var orderamount = parseInt(orders[item].quantity) * parseInt(orders[item].rate);
 
                     //if (orders[item].status == "open") {
-                    openorders = ("<tr id='" + orders[item].item + Date.parse(orders[item].time) + "'><td>" + orderdate + "<br><span class='grey-text'>" + ordertime + "</span></td><td>" + orders[item].item + "<br><span class='grey-text'>" + orders[item].category + "</span></td><td>" + orders[item].quantity + "</td><td>" + orders[item].rate + "</td><td class='strong'>" + orderamount + "</td><td>" + orders[item]["username"] + "</td><td><a class='btn-floating waves-effect waves-light red 'onclick='ordercancel(" + '"' + orders[item].time + '","' + orders[item].item + '"' + ")'><i class='material-icons' >close</i></a><a class='btn-floating waves-effect waves-light blue' onclick='orderdone(" + '"' + orders[item].time + '","' + orders[item].item + '"' + ")'><i class='material-icons'>done_all</i></a><a class='btn-floating waves-effect waves-light green' onclick='orderready(" + '"' + orders[item].time + '","' + orders[item].item + '"' + ")'><i class='material-icons'>check</i></a></td></tr>");
+                    openorders = ("<tr id='" + orders[item].item + Date.parse(orders[item].time) + "'><td>" + orderdate + "<br><span class='grey-text'>" + ordertime + "</span></td><td>" + orders[item].item + "<br><span class='grey-text'>" + orders[item].category + "</span></td><td>" + orders[item].quantity + "</td><td>" + orders[item].rate + "</td><td class='strong'>" + orderamount + "</td><td>" + orders[item]["username"] + "</td></tr>");
                     //.concat(openorders);
                     $("#orders-list").prepend(openorders);
                     //}
@@ -179,7 +177,6 @@
         });
 
     </script>
-
 
 
 
